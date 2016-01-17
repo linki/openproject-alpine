@@ -1,0 +1,46 @@
+# a fig.yml that shows how each service can be configured
+#
+
+web:
+  build: .
+  environment:
+    DATABASE_URL: postgres://openproject:openproject@db:5432/openproject
+    HEROKU: true
+    OPENPROJECT_ATTACHMENTS__STORAGE__PATH: /var/lib/openproject/attachments
+    RAILS_ENV: production
+    SECRET_KEY_BASE: foobar
+    SESSION_STORE: active_record_store
+  ports:
+    - "3000:3000"
+  links:
+    - db
+  volumes_from:
+    - attachments
+
+worker:
+  build: .
+  command: foreman start worker
+  environment:
+    DATABASE_URL: postgres://openproject:openproject@db:5432/openproject
+    RAILS_ENV: production
+    SECRET_KEY_BASE: foobar
+  links:
+    - db
+
+db:
+  image: postgres:9.4
+  environment:
+    POSTGRES_USER: openproject
+    POSTGRES_PASSWORD: openproject
+  volumes_from:
+    - data
+
+data:
+  image: busybox:latest
+  volumes:
+    - /var/lib/postgresql/data
+
+attachments:
+  image: busybox:latest
+  volumes:
+    - /var/lib/openproject/attachments
