@@ -23,7 +23,7 @@ RUN apk --no-cache add    \
 
 WORKDIR /app
 
-RUN git clone --depth 1 --branch dev https://github.com/opf/openproject.git .
+RUN git clone --depth 1 --branch v5.0.9 https://github.com/opf/openproject.git .
 
 RUN bundle config build.nokogiri --use-system-libraries
 RUN bundle install --deployment --without development test
