@@ -46,6 +46,7 @@ RUN apk --no-cache add    \
       linux-headers       \
       mariadb-dev         \
       postgresql-dev      \
+      ruby-dev            \
       sqlite-dev
 
 COPY setup_database bin/
