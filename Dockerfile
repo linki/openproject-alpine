@@ -3,56 +3,17 @@ MAINTAINER Linki <linki+docker.com@posteo.de>
 
 ENV RAILS_ENV production
 
+COPY install.sh /
+COPY entrypoint.sh /
+
 WORKDIR /app
 
-RUN apk --no-cache add    \
-      build-base          \
-      git                 \
-      libffi-dev          \
-      libxml2-dev         \
-      libxslt-dev         \
-      linux-headers       \
-      mariadb-dev         \
-      nodejs              \
-      postgresql-dev      \
-      ruby-bigdecimal     \
-      ruby-bundler        \
-      ruby-dev            \
-      ruby-io-console     \
-      ruby-irb            \
-      sqlite-dev       && \
-
-    git clone --depth 1 --branch dev https://github.com/opf/openproject.git .      && \
-
-    bundle config build.nokogiri --use-system-libraries                            && \
-    bundle install --deployment --without development test                         && \
-
-    sed -i 's/bower install/bower install --allow-root/g' frontend/package.json    && \
-    npm install --unsafe-perm                                                      && \
-
-    SECRET_TOKEN=foobar DATABASE_URL=sqlite3://db/ignore_me.sqlite3                   \
-      bundle exec rake assets:precompile                                           && \
-
-    gem install foreman --no-ri --no-rdoc                                          && \
-    sed -i 's/Rails.groups(:opf_plugins)/Rails.groups(:opf_plugins, :docker)/g'       \
-      config/application.rb                                                        && \
-
-    apk --purge del       \
-      build-base          \
-      libffi-dev          \
-      libxml2-dev         \
-      libxslt-dev         \
-      linux-headers       \
-      mariadb-dev         \
-      postgresql-dev      \
-      ruby-dev            \
-      sqlite-dev
+RUN /install.sh
 
 COPY setup_database bin/
-COPY entrypoint.sh ./
 
 VOLUME ["/app/files"]
 EXPOSE 3000
 
-ENTRYPOINT ["/app/entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
 CMD HOST=0.0.0.0 PORT=3000 foreman start web
