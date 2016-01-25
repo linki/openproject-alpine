@@ -46,8 +46,7 @@ RUN apk --no-cache add    \
       linux-headers       \
       mariadb-dev         \
       postgresql-dev      \
-      sqlite-dev          \
-      sqlite-libs
+      sqlite-dev
 
 COPY setup_database bin/
 COPY entrypoint.sh ./
