@@ -38,6 +38,17 @@ RUN gem install foreman --no-ri --no-rdoc
 RUN sed -i 's/Rails.groups(:opf_plugins)/Rails.groups(:opf_plugins, :docker)/g' \
       config/application.rb
 
+RUN apk --purge del       \
+      build-base          \
+      libffi-dev          \
+      libxml2-dev         \
+      libxslt-dev         \
+      linux-headers       \
+      mariadb-dev         \
+      postgresql-dev      \
+      sqlite-dev          \
+      sqlite-libs
+
 COPY setup_database bin/
 COPY entrypoint.sh ./
 
