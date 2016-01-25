@@ -8,12 +8,6 @@ WORKDIR /app
 RUN apk --no-cache add    \
       build-base          \
       git                 \
-      ruby                \
-      ruby-bigdecimal     \
-      ruby-bundler        \
-      ruby-dev            \
-      ruby-io-console     \
-      ruby-irb            \
       libffi-dev          \
       libxml2-dev         \
       libxslt-dev         \
@@ -21,6 +15,11 @@ RUN apk --no-cache add    \
       mariadb-dev         \
       nodejs              \
       postgresql-dev      \
+      ruby-bigdecimal     \
+      ruby-bundler        \
+      ruby-dev            \
+      ruby-io-console     \
+      ruby-irb            \
       sqlite-dev       && \
 
     git clone --depth 1 --branch dev https://github.com/opf/openproject.git .      && \
