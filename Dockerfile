@@ -3,6 +3,8 @@ MAINTAINER Linki <linki+docker.com@posteo.de>
 
 ENV RAILS_ENV production
 
+WORKDIR /app
+
 RUN apk --no-cache add    \
       build-base          \
       git                 \
@@ -21,8 +23,6 @@ RUN apk --no-cache add    \
       postgresql-dev      \
       sqlite-dev
 
-WORKDIR /app
-
 RUN git clone --depth 1 --branch dev https://github.com/opf/openproject.git .
 
 RUN bundle config build.nokogiri --use-system-libraries
@@ -32,11 +32,11 @@ RUN sed -i 's/bower install/bower install --allow-root/g' frontend/package.json
 RUN npm install --unsafe-perm
 
 RUN SECRET_TOKEN=foobar DATABASE_URL=sqlite3://db/ignore_me.sqlite3 \
-    bundle exec rake assets:precompile
+      bundle exec rake assets:precompile
 
 RUN gem install foreman --no-ri --no-rdoc
-RUN sed -i 's/Rails.groups(:opf_plugins)/Rails.groups(:opf_plugins, :docker)/g'\
-    config/application.rb
+RUN sed -i 's/Rails.groups(:opf_plugins)/Rails.groups(:opf_plugins, :docker)/g' \
+      config/application.rb
 
 COPY setup_database bin/
 COPY entrypoint.sh ./
