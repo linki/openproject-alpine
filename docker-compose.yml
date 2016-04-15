@@ -5,7 +5,7 @@ web:
   build: .
   environment:
     DATABASE_URL: postgres://openproject:openproject@db:5432/openproject
-    HEROKU: true
+    HEROKU: 'true'
     OPENPROJECT_ATTACHMENTS__STORAGE__PATH: /var/lib/openproject/attachments
     RAILS_ENV: production
     SECRET_KEY_BASE: foobar
